@@ -57,8 +57,10 @@ if(send_hlf or send_mtf):
     alarm = st.button("Alarmieren", use_container_width=True, type="primary")
     
     if(alarm):
+        pull_stream = speechsdk.audio.PullAudioOutputStream()
+    
         speech_config = speechsdk.SpeechConfig(subscription=os.environ.get('SPEECH_KEY'), region=os.environ.get('SPEECH_REGION'))
-        audio_config = speechsdk.audio.AudioOutputConfig(use_default_speaker=True)
+        audio_config = speechsdk.audio.AudioOutputConfig(stream=pull_stream)
         speech_config.speech_synthesis_voice_name='de-DE-KatjaNeural'
         speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
 

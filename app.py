@@ -9,7 +9,7 @@ st.set_page_config(page_title="BF-Tag Notfallabfrage", page_icon="🚒", initial
 st.header("Wo ist der Notfallort?")
 city_col, address_col = st.columns(2)
 city = city_col.text_input("Stadt", value="Dresden", autocomplete="off")
-address = address_col.text_input("Adresse", placeholder="Lilienstraße 1 / Bismarksäule", autocomplete="off")
+address = address_col.text_input("Adresse", placeholder="Lilienstraße 1 / Bismarcksäule", autocomplete="off")
 
 if(not address):
     st.stop()

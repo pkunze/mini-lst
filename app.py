@@ -28,7 +28,7 @@ except:
 st.header("Was ist passiert?")
 
 description = st.text_area("Kurzbeschreibung", placeholder="Was ist passiert?", help="Stichpunktartig den Unfall/Notfall-Hergang beschreiben.")
-category = st.selectbox("Einsatz-Kategorie", ["Brandmeldeanlage", "Brandeinsatz", "Technische Hilfeleistung", "Medizinischer Notfall", "Tierrettung"], placeholder="Waehle eine Einsatz-Kategorie")
+category = st.selectbox("Einsatz-Kategorie", ["", "Brandmeldeanlage", "Brandeinsatz", "Technische Hilfeleistung", "Medizinischer Notfall", "Tierrettung"], format_func=lambda x: '🔔 Einsatz-Kategorie auswählen' if x == '' else x)
 if(not description or not category):
     st.stop()
 

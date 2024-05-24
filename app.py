@@ -1,16 +1,29 @@
 import os
 import azure.cognitiveservices.speech as speechsdk
 import streamlit as st
-from preferredsoundplayer import *
+import pandas as pd
+from geopy.geocoders import Nominatim
 
 st.set_page_config(page_title="BF-Tag Notfallabfrage", page_icon="🚒", initial_sidebar_state="collapsed")
 
 st.header("Wo ist der Notfallort?")
-city = st.text_input("Stadt", value="Dresden")
-address = st.text_input("Adresse", placeholder="Lilienstraße 1 / Bismarksäule")
+city_col, address_col = st.columns(2)
+city = city_col.text_input("Stadt", value="Dresden", autocomplete="off")
+address = address_col.text_input("Adresse", placeholder="Lilienstraße 1 / Bismarksäule", autocomplete="off")
 
 if(not address):
     st.stop()
+
+try:
+    geolocator = Nominatim(user_agent="jf_kaitz_bf_tag_leitstelle")
+    location = geolocator.geocode(f"{address}, {city}, Deutschland")
+
+    st.map([{
+        "lat": location.latitude,
+        "lon": location.longitude
+    }], zoom=16, size=10)
+except:
+    st.warning("Die Adresse konnte nicht gefunden werden. Möglicherweise wurde sie falsch verstanden?", icon="📍")
 
 st.header("Was ist passiert?")
 
@@ -83,12 +96,11 @@ if(send_hlf or send_mtf):
         
         if(city):
             alarm_text += f" {city}."
-        
         if(address):
             alarm_text += f" {address} -"
-
+            
         if(description):
-            alarm_text += f" {description}."
+            alarm_text += f" {description}." 
             
         if(patient_count == 1):
             alarm_text += f" Eine Person verletzt."

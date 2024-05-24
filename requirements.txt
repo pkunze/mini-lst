@@ -1,2 +1,4 @@
 azure-cognitiveservices-speech
 preferredsoundplayer
+geopy
+pandas

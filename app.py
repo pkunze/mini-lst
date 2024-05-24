@@ -32,8 +32,8 @@ if(not description or not category):
     st.stop()
 
 st.header("Wer ruft an?")
-caller_name = st.text_input("Name", placeholder="Günther Hörmann")
-st.text_input("Telefonnummer für Rückfragen (optional)", placeholder="0123456789")
+caller_name = st.text_input("Name", placeholder="Günther Hörmann", autocomplete="off")
+st.text_input("Telefonnummer für Rückfragen (optional)", placeholder="0123456789", autocomplete="off")
 
 if(not caller_name):
     st.stop()
@@ -47,7 +47,7 @@ if(patient_count > 0):
     for i in range(patient_count):
         with tabs[i]:
             name = f"Person {i+1}"
-            name_new = st.text_input(f"Name", placeholder="Vorname Nachname", key=f"name_{i+1}")
+            name_new = st.text_input(f"Name", placeholder="Vorname Nachname", key=f"name_{i+1}" , autocomplete="off")
             
             if(name_new):
                 name = name_new
@@ -109,4 +109,3 @@ if(send_hlf or send_mtf):
         speech_synthesis_result = speech_synthesizer.speak_text_async(alarm_text).get()
         st.write("Alarmmeldung vorlesen...")
         st.audio(speech_synthesis_result.audio_data, format="audio/mpeg", autoplay=True)
-

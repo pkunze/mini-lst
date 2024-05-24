@@ -35,7 +35,7 @@ if(patient_count > 0):
     for i in range(patient_count):
         with tabs[i]:
             name = f"Person {i+1}"
-            name_new = st.text_input(f"Name", placeholder="Vorname Nachname")
+            name_new = st.text_input(f"Name", placeholder="Vorname Nachname", key=f"name_{i+1}")
             
             if(name_new):
                 name = name_new
@@ -44,7 +44,8 @@ if(patient_count > 0):
             st.text_area(
                 f"Wie geht es {name} jetzt gerade?", 
                 placeholder=f"Beschreibung des aktuellen Zustands von {name}", 
-                help="Ansprechbar/bei Bewusstsein? Verletzungen? Vorerkrankungen? Atmung? Orientiert?")
+                help="Ansprechbar/bei Bewusstsein? Verletzungen? Vorerkrankungen? Atmung? Orientiert?",
+                key=f"description_{i+1}")
 
 st.header("Alarmierung")
 col_hlf, col_mtf = st.columns(2)
@@ -55,8 +56,12 @@ st.markdown("---")
 
 if(send_hlf or send_mtf):
     alarm = st.button("Alarmieren", use_container_width=True, type="primary")
-    
+
     if(alarm):
+        st.markdown("---")
+
+        st.warning("Die folgenden Audioplayer starten automatisch. Man muss nicht extra auf 'Play' drücken. Sie lassen sich leider aus technischen Gründen nicht verstecken.", icon="⚠️")
+        
         pull_stream = speechsdk.audio.PullAudioOutputStream()
     
         speech_config = speechsdk.SpeechConfig(subscription=os.environ.get('SPEECH_KEY'), region=os.environ.get('SPEECH_REGION'))
@@ -64,7 +69,7 @@ if(send_hlf or send_mtf):
         speech_config.speech_synthesis_voice_name='de-DE-KatjaNeural'
         speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
 
-        st.subheader("Gong abspielen (startet beim ersten mal automatisch)")
+        st.write("Gong abspielen...")
         st.audio("./firehouse_alarm_gong.mp3", format="audio/mpeg", autoplay=True)
         sleep(5)
         
@@ -91,6 +96,6 @@ if(send_hlf or send_mtf):
             alarm_text += f" {patient_count} Personen verletzt."
         
         speech_synthesis_result = speech_synthesizer.speak_text_async(alarm_text).get()
-        st.subheader("Alarmmeldung vorlesen (startet beim ersten mal automatisch)")
+        st.write("Alarmmeldung vorlesen...")
         st.audio(speech_synthesis_result.audio_data, format="audio/mpeg", autoplay=True)
 

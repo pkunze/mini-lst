@@ -15,7 +15,7 @@ if(not address):
 st.header("Was ist passiert?")
 
 description = st.text_area("Kurzbeschreibung", placeholder="Was ist passiert?", help="Stichpunktartig den Unfall/Notfall-Hergang beschreiben.")
-category = st.selectbox("Einsatz-Kategorie", ["Brandmeldeanlage", "Brandeinsatz", "Technische Hilfeleistung", "Medizinischer Notfall", "Tierrettung"])
+category = st.selectbox("Einsatz-Kategorie", ["Brandmeldeanlage", "Brandeinsatz", "Technische Hilfeleistung", "Medizinischer Notfall", "Tierrettung"], placeholder="Waehle eine Einsatz-Kategorie")
 if(not description or not category):
     st.stop()
 
@@ -62,7 +62,8 @@ if(send_hlf or send_mtf):
         speech_config.speech_synthesis_voice_name='de-DE-KatjaNeural'
         speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
 
-        soundplay("./firehouse_alarm_gong.mp3")
+        st.subheader("Gong abspielen (startet beim ersten mal automatisch)")
+        st.audio("./firehouse_alarm_gong.mp3", format="audio/mpeg", autoplay=True)
         sleep(5)
         
         alarm_text = f"Alarm! {category}! Es kommt zum Einsatz: "
@@ -88,3 +89,6 @@ if(send_hlf or send_mtf):
             alarm_text += f" {patient_count} Personen verletzt."
         
         speech_synthesis_result = speech_synthesizer.speak_text_async(alarm_text).get()
+        st.subheader("Alarmmeldung vorlesen (startet beim ersten mal automatisch)")
+        st.audio(speech_synthesis_result.audio_data, format="audio/mpeg", autoplay=True)
+

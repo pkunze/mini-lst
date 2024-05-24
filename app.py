@@ -41,8 +41,9 @@ if(not caller_name):
 st.header("Betroffene Personen")
 patient_count = st.number_input("Wie viele Personen sind verletzt/erkrankt?", min_value=0, max_value=10, value=0)
 
+patients = [{'name': f"Unbekannte Person", 'age': 0, 'condition': ''} for i in range(patient_count)]
+
 if(patient_count > 0):
-    patients = []
     tabs = [tab for tab in st.tabs([f"Person {i+1}" for i in range(patient_count)])]
     for i in range(patient_count):
         with tabs[i]:
@@ -50,10 +51,10 @@ if(patient_count > 0):
             name_new = st.text_input(f"Name", placeholder="Vorname Nachname", key=f"name_{i+1}" , autocomplete="off")
             
             if(name_new):
-                name = name_new
+                patients[i]['name'] = name = name_new
             
-            st.number_input(f"Wie alt ist {name}?", min_value=0, max_value=120, value=0, key=f"age_{i+1}")
-            st.text_area(
+            patients[i]['age'] = st.number_input(f"Wie alt ist {name}?", min_value=0, max_value=120, value=0, key=f"age_{i+1}")
+            patients[i]['condition'] = st.text_area(
                 f"Wie geht es {name} jetzt gerade?", 
                 placeholder=f"Beschreibung des aktuellen Zustands von {name}", 
                 help="Ansprechbar/bei Bewusstsein? Verletzungen? Vorerkrankungen? Atmung? Orientiert?",
@@ -105,6 +106,19 @@ if(send_hlf or send_mtf):
             alarm_text += f" Eine Person verletzt."
         elif(patient_count > 1):
             alarm_text += f" {patient_count} Personen verletzt."
+            
+        for i in range(len(patients)):
+            alarm_text += f"Patient {i+1}: {patients[i]['name']}"
+            
+            if(patients[i]['age'] == 1):
+                alarm_text += " - ein Jahr alt"
+            elif(patients[i]['age'] > 1):
+                alarm_text += f" - {patients[i]['age']} Jahre alt"                
+                            
+            if(patients[i]['condition']):
+                alarm_text += f" - {patients[i]['condition']}"
+            alarm_text += "! "
+            
         
         speech_synthesis_result = speech_synthesizer.speak_text_async(alarm_text).get()
         st.write("Alarmmeldung vorlesen...")

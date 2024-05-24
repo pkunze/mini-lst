@@ -22,7 +22,7 @@ try:
         "lon": location.longitude
     }], zoom=16, size=10)
 except:
-    st.warning("Die Adresse konnte nicht gefunden werden. Möglicherweise wurde sie falsch verstanden?", icon="📍")
+    st.info("Die Adresse konnte nicht gefunden werden. Möglicherweise wurde sie falsch verstanden?", icon="📍")
 
 st.header("Was ist passiert?")
 

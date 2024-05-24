@@ -1,7 +1,6 @@
-import os
+import os, time
 import azure.cognitiveservices.speech as speechsdk
 import streamlit as st
-import pandas as pd
 from geopy.geocoders import Nominatim
 
 st.set_page_config(page_title="BF-Tag Notfallabfrage", page_icon="🚒", initial_sidebar_state="collapsed")
@@ -84,15 +83,15 @@ if(send_hlf or send_mtf):
 
         st.write("Gong abspielen...")
         st.audio("./firehouse_alarm_gong.mp3", format="audio/mpeg", autoplay=True)
-        sleep(5)
+        time.sleep(5)
         
         alarm_text = f"Alarm! {category}! Es kommt zum Einsatz: "
         if(send_hlf and send_mtf):
-            alarm_text += "HLF-10 und MTF."
+            alarm_text += "HLF-10 und MTF!"
         elif(send_hlf):
-            alarm_text += "HLF-10."
+            alarm_text += "HLF-10!"
         elif(send_mtf):
-            alarm_text += "MTF."
+            alarm_text += "MTF!"
         
         if(city):
             alarm_text += f" {city}."

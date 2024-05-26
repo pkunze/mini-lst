@@ -63,7 +63,7 @@ if(patient_count > 0):
 st.header("Alarmierung")
 col_hlf, col_mtf = st.columns(2)
 send_hlf = col_hlf.checkbox("HLF 10", value=False)
-send_mtf = col_mtf.checkbox("MTF", value=False)
+send_mtf = col_mtf.checkbox("MTW", value=False)
 
 st.markdown("---")
 
@@ -86,13 +86,13 @@ if(send_hlf or send_mtf):
         st.audio("./firehouse_alarm_gong.mp3", format="audio/mpeg", autoplay=True)
         time.sleep(3.5)
         
-        alarm_text = f"Alarm! {category}! Es kommt zum Einsatz: "
+        alarm_text = f"Einsatzalarm! {category}! Es kommt zum Einsatz: "
         if(send_hlf and send_mtf):
-            alarm_text += "HLF-10 und MTF!"
+            alarm_text += "HLF-10 und MTW!"
         elif(send_hlf):
             alarm_text += "HLF-10!"
         elif(send_mtf):
-            alarm_text += "MTF!"
+            alarm_text += "MTW!"
         if(city or address):
             alarm_text += " Einsatzort: "
         if(address):
